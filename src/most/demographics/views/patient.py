@@ -1,16 +1,14 @@
 # -*- coding: utf-8 -*-
-from django.http import Http404, HttpResponse
+from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST, require_GET
-from django.shortcuts import render
-from django.forms.models import inlineformset_factory
 from django.utils.translation import ugettext as _
 import json
 from datetime import date, datetime
 from django.db.models import Q
-from demographics.models import Patient, City, Identifier
-from demographics.forms import PatientForm
-from demographics.views import SUCCESS_KEY, MESSAGE_KEY, ERRORS_KEY, DATA_KEY, TOTAL_KEY
+from ..models import Patient, City, Identifier
+from ..forms import PatientForm
+from . import SUCCESS_KEY, MESSAGE_KEY, ERRORS_KEY, DATA_KEY, TOTAL_KEY
 
 
 @csrf_exempt
