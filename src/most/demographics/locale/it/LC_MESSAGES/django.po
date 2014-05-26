@@ -1,0 +1,254 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-05-25 16:52+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: it\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: models.py:34
+msgid "Type"
+msgstr "Tipo"
+
+#: models.py:35
+msgid "Domain"
+msgstr "Dominio"
+
+#: models.py:36
+msgid "Identifier"
+msgstr "identificativo"
+
+#: models.py:42
+msgid "identifier"
+msgstr "identificativo"
+
+#: models.py:43
+msgid "identifiers"
+msgstr "identificativi"
+
+#: models.py:98
+msgid "Name"
+msgstr "Nome"
+
+#: models.py:99
+msgid "Province"
+msgstr "Provincia"
+
+#: models.py:99
+msgid "Use 2 letters format"
+msgstr "Utilizzare il formato a 2 lettere"
+
+#: models.py:100
+msgid "State"
+msgstr "Stato"
+
+#: models.py:100
+msgid "Mandatory"
+msgstr "Obbligatorio"
+
+#: models.py:101
+msgid "Code"
+msgstr "Codice"
+
+#: models.py:101
+msgid "e.g. C.A.P., ZIP, etc."
+msgstr "ad esempio C.A.P., ZIP, ecc."
+
+#: models.py:107
+msgid "city"
+msgstr "città"
+
+#: models.py:108
+msgid "cities"
+msgstr "città"
+
+#: models.py:178
+msgid "Male"
+msgstr "Maschio"
+
+#: models.py:179
+msgid "Female"
+msgstr "Femmina"
+
+#: models.py:184
+msgid "National Tax Code"
+msgstr "Codice Fiscale"
+
+#: models.py:184
+msgid "e.g. SSN"
+msgstr "ad esempio SSN"
+
+#: models.py:185
+msgid "First name"
+msgstr "Nome"
+
+#: models.py:186
+msgid "Last name"
+msgstr "Cognome"
+
+#: models.py:187
+msgid "Other IDs"
+msgstr "Altri ID"
+
+#: models.py:188
+msgid "Gender"
+msgstr "Sesso"
+
+#: models.py:189
+msgid "Birth date"
+msgstr "Data di nascita"
+
+#: models.py:190
+msgid "Birth place"
+msgstr "Luogo di nascita"
+
+#: models.py:191
+msgid "Address"
+msgstr "Indirizzo"
+
+#: models.py:193
+msgid "Phone"
+msgstr "Telefono"
+
+#: models.py:194
+msgid "Mobile phone"
+msgstr "Cellulare"
+
+#: models.py:195
+msgid "Email"
+msgstr "Email"
+
+#: models.py:196
+msgid "Certified email"
+msgstr "PEC"
+
+#: models.py:200
+msgid "Is the patient active?"
+msgstr "Il paziente è attivo?"
+
+#: models.py:203
+msgid "patient"
+msgstr "paziente"
+
+#: models.py:204
+msgid "patients"
+msgstr "pazienti"
+
+#: views/city.py:43
+#, python-format
+msgid "Field %s is mandatory.\n"
+msgstr "Il campo %s è obbligatorio.\n"
+
+#: views/city.py:58
+#, python-format
+msgid "City %s successfully created."
+msgstr "La città %s è stata creata con successo."
+
+#: views/city.py:62
+msgid "Unable to save city."
+msgstr "Impossibile salvare la città."
+
+#: views/city.py:66
+#, python-format
+msgid "City %s already exists."
+msgstr "La città %s esiste già."
+
+#: views/city.py:77 views/identifier.py:76 views/patient.py:88
+#: views/patient.py:156 views/patient.py:179
+msgid "POST method required.\n"
+msgstr "POST method necessario.\n"
+
+#: views/city.py:80 views/identifier.py:79 views/patient.py:92
+msgid "Ajax data required.\n"
+msgstr "Dati Ajax necessari.\n"
+
+#: views/city.py:107
+#, python-format
+msgid "%(cities_count)s cities found for query string: '%(query_string)s'"
+msgstr ""
+"%(cities_count)s città trovate con la stringa di ricerca: '%(query_string)s'"
+
+#: views/city.py:111 views/identifier.py:109
+#, python-format
+msgid "No cities found for query string: '%s'"
+msgstr "Nessuna città trovata con la stringa di ricerca: '%s'"
+
+#: views/city.py:118 views/identifier.py:116 views/patient.py:129
+msgid "GET method required.\n"
+msgstr "GET method necessario.\n"
+
+#: views/identifier.py:42 views/patient.py:51
+#, python-format
+msgid "Field %s is mandatory\n"
+msgstr "Il campo %s è necessatrio.\n"
+
+#: views/identifier.py:57
+#, python-format
+msgid "Identifier %s successfully created."
+msgstr "Identificativo %s creato con successo."
+
+#: views/identifier.py:61
+msgid "Unable to save identifier."
+msgstr "Impossibile salvare l'identificativo."
+
+#: views/identifier.py:65
+#, python-format
+msgid "Identifier %s already exists."
+msgstr "L'identificativo %s esiste già."
+
+#: views/identifier.py:105
+#, python-format
+msgid ""
+"%(identifiers_count)s identifiers found for query string: '%(query_string)s'"
+msgstr ""
+"%(identifiers_count)s identificativi trovati con la stringa di ricerca: "
+"'%(query_string)s'"
+
+#: views/patient.py:74
+#, python-format
+msgid "Patient %s successfully created"
+msgstr "Paziente %s creato con successo."
+
+#: views/patient.py:118
+#, python-format
+msgid "%(patients_count)s patients found with query string: '%(query_string)s'"
+msgstr ""
+"%(patients_count)s pazienti trovati con la stringa di ricerca: "
+"'%(query_string)s'"
+
+#: views/patient.py:122
+#, python-format
+msgid "No patients found for query string: '%s'"
+msgstr "Nessun paziente trovato con la stringa di ricerca: '%s'"
+
+#: views/patient.py:149
+#, fuzzy, python-format
+msgid "Patient %s is active"
+msgstr "Il paziente è attivo?"
+
+#: views/patient.py:172
+#, python-format
+msgid "Patient %s is not active"
+msgstr "Il paziente %s non è attivo."
+
+#, fuzzy
+#~ msgid "Mandatory only if extra-italian city"
+#~ msgstr "Campo obbligatorio solo nel caso di città non italiane"
+
+#~ msgid "address"
+#~ msgstr "indirizzo"
+
+#~ msgid "addresses"
+#~ msgstr "indirizzi"
