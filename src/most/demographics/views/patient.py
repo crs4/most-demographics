@@ -46,7 +46,6 @@ def new(request):
                             errors += _('Field %s is mandatory\n' % field)
                             mandatory_fields_checked = False
                     except Exception, e:
-                        print 'In for field in Patient.MANDATORY_FIELDS'
                         errors += u'%s\n' % e
                 if not mandatory_fields_checked:
                     result[ERRORS_KEY] = errors
@@ -58,7 +57,8 @@ def new(request):
                         else:
                             other_ids = None
                         patient_data['birth_place'] = City.objects.get(pk=patient_data['birth_place'])
-                        patient_data['city'] = City.objects.get(pk=patient_data['city'])
+                        if 'city' in patient_data:
+                            patient_data['city'] = City.objects.get(pk=patient_data['city'])
                         patient = Patient(**patient_data)
                         patient.save()
                         if other_ids:
@@ -69,21 +69,17 @@ def new(request):
                         result[MESSAGE_KEY] = _('Patient %s successfully created' % patient.pk)
                         result[DATA_KEY] = patient.to_dictionary()
                     except Exception, e:
-                        print 'In else of if not mandatory_fields_checked'
                         errors += u'%s\n' % e
                         result[ERRORS_KEY] = errors
                         result[SUCCESS_KEY] = False
             except Exception, e:
-                print 'In if request.method == \'POST\''
                 errors += u'%s\n' % e
                 result[ERRORS_KEY] = errors
                 result[SUCCESS_KEY] = False
         else:
-            print 'In else of if request.method == \'POST\''
             result[ERRORS_KEY] = _('POST method required.\n')
             result[SUCCESS_KEY] = False
     else:
-        print 'In else of if request.is_ajax()'
         result[ERRORS_KEY] = _('Ajax data required.\n')
         result[SUCCESS_KEY] = False
     return HttpResponse(json.dumps(result), content_type='application/json; charset=utf8')
@@ -162,7 +158,6 @@ def edit(request, patient_id):
                             errors += _('Field %s is mandatory\n' % field)
                             mandatory_fields_checked = False
                     except Exception, e:
-                        print 'In for field in Patient.MANDATORY_FIELDS'
                         errors += u'%s\n' % e
                 if not mandatory_fields_checked:
                     result[ERRORS_KEY] = errors
@@ -194,21 +189,17 @@ def edit(request, patient_id):
                                 result[ERRORS_KEY] = errors
                                 result[SUCCESS_KEY] = False
                     except Exception, e:
-                        print 'In else of if not mandatory_fields_checked'
                         errors += u'%s\n' % e
                         result[ERRORS_KEY] = errors
                         result[SUCCESS_KEY] = False
             except Exception, e:
-                print 'In if request.method == \'POST\''
                 errors += u'%s\n' % e
                 result[ERRORS_KEY] = errors
                 result[SUCCESS_KEY] = False
         else:
-            print 'In else of if request.method == \'POST\''
             result[ERRORS_KEY] = _('POST method required.\n')
             result[SUCCESS_KEY] = False
     else:
-        print 'In else of if request.is_ajax()'
         result[ERRORS_KEY] = _('Ajax data required.\n')
         result[SUCCESS_KEY] = False
     return HttpResponse(json.dumps(result), content_type='application/json; charset=utf8')

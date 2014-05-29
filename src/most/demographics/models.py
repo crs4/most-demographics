@@ -102,7 +102,7 @@ class City(models.Model):
     #objects = CityManager()
 
     class Meta:
-        unique_together = (('code', 'name', 'province', 'state'), ('code', 'state'))
+        unique_together = ('code', 'name', 'province', 'state')
         verbose_name = _('city')
         verbose_name_plural = _('cities')
 

@@ -22,7 +22,6 @@ def new(request):
     """
     result = {}
     errors = ''
-    print request.body
     if request.is_ajax():
         if request.method == 'POST':
             # check required fields: identifier
