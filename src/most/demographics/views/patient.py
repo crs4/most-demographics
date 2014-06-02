@@ -34,8 +34,8 @@ def new(request):
     """
     result = {}
     errors = ''
-    if request.is_ajax():
-        if request.method == 'POST':
+    if request.method == 'POST':
+        if request.is_ajax():
             # check required fields: first_name, last_name, gender, birth_date, birth_place
             try:
                 patient_data = json.loads(request.body)
@@ -77,10 +77,10 @@ def new(request):
                 result[ERRORS_KEY] = errors
                 result[SUCCESS_KEY] = False
         else:
-            result[ERRORS_KEY] = _('POST method required.\n')
+            result[ERRORS_KEY] = _('Ajax data required.\n')
             result[SUCCESS_KEY] = False
     else:
-        result[ERRORS_KEY] = _('Ajax data required.\n')
+        result[ERRORS_KEY] = _('POST method required.\n')
         result[SUCCESS_KEY] = False
     return HttpResponse(json.dumps(result), content_type='application/json; charset=utf8')
 
@@ -146,8 +146,8 @@ def edit(request, patient_id):
     """
     result = {}
     errors = ''
-    if request.is_ajax():
-        if request.method == 'POST':
+    if request.method == 'POST':
+        if request.is_ajax():
             # check required fields: first_name, last_name, gender, birth_date, birth_place
             try:
                 patient_data = json.loads(request.body)
@@ -176,6 +176,7 @@ def edit(request, patient_id):
                             try:
                                 patient = Patient.objects.get(pk=patient_id)
                                 patient.update(**cleaned_data)
+                                patient.other_ids.clear()
                                 patient.save()
                                 if other_ids:
                                     for identifier in other_ids:
@@ -197,26 +198,26 @@ def edit(request, patient_id):
                 result[ERRORS_KEY] = errors
                 result[SUCCESS_KEY] = False
         else:
-            result[ERRORS_KEY] = _('POST method required.\n')
+            result[ERRORS_KEY] = _('Ajax data required.\n')
             result[SUCCESS_KEY] = False
     else:
-        result[ERRORS_KEY] = _('Ajax data required.\n')
+        result[ERRORS_KEY] = _('POST method required.\n')
         result[SUCCESS_KEY] = False
     return HttpResponse(json.dumps(result), content_type='application/json; charset=utf8')
 
 
 @require_POST
-def activate(request):
+def activate(request, patient_id):
     """Activate a patient, identified by his/her primary key"""
     result = {}
     errors = ''
     if request.method == 'POST':
         try:
-            patient = Patient.objects.get(request.POST['id'])
+            patient = Patient.objects.get(patient_id)
             patient.active = True
             patient.save()
             result[SUCCESS_KEY] = True
-            result[MESSAGE_KEY] = _('Patient %s is active' % request.POST['id'])
+            result[MESSAGE_KEY] = _('Patient %s is active' % patient_id)
             result[DATA_KEY] = patient.to_dictionary()
         except Exception, e:
             errors += u'%s\n' % e
@@ -230,17 +231,17 @@ def activate(request):
 
 @csrf_exempt
 @require_POST
-def deactivate(request):
+def deactivate(request, patient_id):
     """Deactivate a patient, identified by his/her primary key"""
     result = {}
     errors = ''
     if request.method == 'POST':
         try:
-            patient = Patient.objects.get(request.POST['id'])
+            patient = Patient.objects.get(patient_id)
             patient.active = False
             patient.save()
             result[SUCCESS_KEY] = True
-            result[MESSAGE_KEY] = _('Patient %s is not active' % request.POST['id'])
+            result[MESSAGE_KEY] = _('Patient %s is not active' % patient_id)
             result[DATA_KEY] = patient.to_dictionary()
         except Exception, e:
             errors += u'%s\n' % e
@@ -251,26 +252,56 @@ def deactivate(request):
         result[SUCCESS_KEY] = False
     return HttpResponse(json.dumps(result), content_type='application/json; charset=utf8')
 
-
-# TODO: Implement following views
-def set_birth_place(request):
-    """Create new City, if it doesn't exist, and set it as patient birth place"""
+@csrf_exempt
+@require_POST
+def set_birth_place(request, patient_id):
+    """Set a city as patient birth place"""
     result = {}
+    errors = ''
+    if request.method == 'POST':
+        if request.is_ajax():
+            try:
+                birth_place_data = json.loads(request.body)
+                patient = Patient.objects.filter(patient_id)
+                # patient = set_cities(patient, 'birth_place', birth_place_data['id'])
+                # patient.save()
+                result[SUCCESS_KEY] = True
+                result[MESSAGE_KEY] = _('Patient %s has changed to %s' % (patient_id, birth_place.pk))
+                result[DATA_KEY] = patient.to_dictionary()
+            except Exception, e:
+                errors += u'%s\n' % e
+                result[ERRORS_KEY] = errors
+                result[SUCCESS_KEY] = False
+        else:
+            result[ERRORS_KEY] = _('Ajax data required.\n')
+            result[SUCCESS_KEY] = False
+    else:
+        result[ERRORS_KEY] = _('POST method required.\n')
+        result[SUCCESS_KEY] = False
     return HttpResponse(json.dumps(result), content_type='application/json; charset=utf8')
 
 
-def add_identifier(request):
+# TODO: Implement following views
+def add_identifier(request, patient_id):
     """Create new Identifier and add to other_identifiers"""
     result = {}
     return HttpResponse(json.dumps(result), content_type='application/json; charset=utf8')
 
 
-def remove_identifier(request):
+def remove_identifier(request, patient_id):
     """Set id disabled"""
     result = {}
     return HttpResponse(json.dumps(result), content_type='application/json; charset=utf8')
 
 
-def set_city(request):
+def set_city(request, patient_id):
     result = {}
     return HttpResponse(json.dumps(result), content_type='application/json; charset=utf8')
+
+
+def set_cities(patient, attribute, city_id):
+    """Set patient's City attributes"""
+    city = City.objects.get(pk=city_id)
+    patient.__setattr__(attribute, city)
+    patient.save()
+    return patient
