@@ -4,7 +4,6 @@ from django.core.urlresolvers import reverse
 from demographics.models import Patient, City, Identifier
 import json
 from django.db.models import Q
-from datetime import date
 
 
 def create_identifier(identifier, type=None, domain=None):
@@ -16,6 +15,9 @@ def create_identifier(identifier, type=None, domain=None):
 
 
 def get_identifier_by_query_string(query_string):
+    """
+    Get an identifier by given query string
+    """
     query_set = (Q())
     query_list = [query for query in query_string.split(' ') if query]
     for query in query_list:
@@ -38,6 +40,9 @@ def create_city(name, state, province=None, code=None):
 
 
 def get_city_by_query_string(query_string):
+    """
+    Get a city by given query string
+    """
     query_set = (Q())
     query_list = [query for query in query_string.split(' ') if query]
     for query in query_list:
@@ -83,6 +88,9 @@ def create_patient(first_name, last_name, gender, birth_date, birth_place, accou
 
 
 def get_patient_by_query_string(query_string):
+    """
+    Get a patient by given query string
+    """
     query_set = (Q())
     query_list = [query for query in query_string.split(' ') if query]
     for query in query_list:
