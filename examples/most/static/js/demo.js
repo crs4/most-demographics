@@ -221,6 +221,7 @@ $(document).ready(function () {
 
     $('#edit_patient_form').submit(function (event) {
         event.preventDefault();
+        console.log('In edit_patient_form submit');
         var patientArrayData = $('#edit_patient_form').serialize().split("&");
         var patientObject = {};
         var patientKW;
@@ -230,7 +231,7 @@ $(document).ready(function () {
         }
         var patientJsonData = JSON.stringify(patientObject);
         $.ajax({
-            url: '/demographics/patient/edit/',
+            url: '/demographics/patient/' + $( '#patient_id' ).val() + '/edit/',
             type: 'POST',
             data: patientJsonData,
             dataType: 'text',
@@ -281,6 +282,74 @@ $(document).ready(function () {
         }
     });
     $('#get_patient_button').click(getPatient);
+
+    $( "#patient" ).autocomplete({
+        source: function( request, response ) {
+            $.ajax({
+                url: "/demographics/patient/get/",
+                dataType: "json",
+                data: {
+                    query_string: request.term
+                },
+                success: function( data ) {
+                    response( $.map( data.data, function( item ) {
+                        return {
+                            label: item.first_name + ' ' + item.last_name + (item.account_number ? ' (' + item.account_number + ')' : ''),
+                            value: item.id,
+                            first_name: item.first_name,
+                            last_name: item.last_name,
+                            gender: item.gender,
+                            birth_date: item.birth_date,
+                            birth_place: item.birth_place,
+                            account_number: item.account_number,
+                            address: item.address,
+                            city: item.city,
+                            phone: item.phone,
+                            mobile: item.mobile,
+                            email: item.email,
+                            certified_email: item.certified_email,
+                            active: item.active
+                        }
+                    }));
+                }
+            });
+        },
+        /*focus: function( event, ui ) {
+            $( "#birth_place" ).val( ui.item.label );
+            return false;
+        },*/
+        select: function( event, ui ) {
+            $( "#patient" ).val( ui.item.label );
+            $( "#patient_id" ).val( ui.item.value );
+            $( "#edit_first_name" ).val( ui.item.first_name );
+            $( "#edit_last_name" ).val( ui.item.last_name );
+            $( "input[name=gender][value=" + ui.item.gender + "]").prop('checked', true);
+            var birthDate = new Date(ui.item.birth_date);
+            $( "#edit_birth_date" ).val( $.datepicker.formatDate('yy-mm-dd', birthDate) );
+            $( "#edit_birth_place" ).val( ui.item.birth_place.name + ( ui.item.birth_place.province ? ' (' +  ui.item.birth_place.province + ')' : '') );
+            $( "#edit_birth_place_id" ).val( ui.item.birth_place.id );
+            $( "#edit_account_number" ).val( ui.item.account_number );
+            $( "#edit_address" ).val( ui.item.address );
+            $( "#edit_city" ).val( ui.item.city.name + ( ui.item.city.province ? ' (' +  ui.item.city.province + ')' : ''));
+            $( "#edit_city_id" ).val( ui.item.city.id );
+            $( "#edit_phone" ).val( ui.item.phone );
+            $( "#edit_mobile" ).val( ui.item.mobile );
+            $( "#edit_email" ).val( ui.item.email );
+            $( "#edit_certified_email" ).val( ui.item.certified_email );
+            $( "#edit_active" ).val( ui.item.active );
+
+            return false;
+        },
+        minLength: 2,
+        open: function() {
+            $( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
+        },
+        close: function() {
+            $( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
+        }
+    });
+
+
 
     $( "#birth_place" ).autocomplete({
         source: function( request, response ) {

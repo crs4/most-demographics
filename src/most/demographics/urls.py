@@ -16,7 +16,7 @@ urlpatterns = patterns('',
 # Patient API related urls
 urlpatterns += patterns('',
     (r'^patient/new/$', patient.new),
-    (r'^patient/get/$', patient.get),
+    (r'^patient/get/$', patient.filter),  # TODO add a "real" get api to get single patient
     (r'^patient/(?P<patient_id>\d+)/edit/$', patient.edit),
     (r'^patient/(?P<patient_id>\d+)/deactivate/$', patient.deactivate),
     (r'^patient/(?P<patient_id>\d+)/activate/$', patient.activate),
@@ -37,14 +37,14 @@ urlpatterns += patterns('',
 # City API related urls
 urlpatterns += patterns('',
     (r'^city/new/$', city.new),
-    (r'^city/get/$', city.get),
+    (r'^city/get/$', city.filter),
     (r'^city/(?P<city_id>\d+)/edit/$', city.edit),
 )
 
 # Identifier API related urls
 urlpatterns += patterns('',
     (r'^identifier/new/$', identifier.new),
-    (r'^identifier/get/$', identifier.get),
+    (r'^identifier/get/$', identifier.filter),
     (r'^identifier/(?P<identifier_id>\d+)/edit/$', identifier.edit),
     (r'^identifier/(?P<identifier_id>\d+)/get_patient/$', identifier.get_patient),
 )

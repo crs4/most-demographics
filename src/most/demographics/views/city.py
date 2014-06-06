@@ -8,6 +8,7 @@ import json
 from datetime import date, datetime
 from django.db.models import Q
 from ..models import City
+from ..forms import CityForm
 from . import SUCCESS_KEY, MESSAGE_KEY, ERRORS_KEY, DATA_KEY, TOTAL_KEY
 
 
@@ -76,7 +77,7 @@ def new(request):
 
 
 @require_GET
-def get(request):
+def filter(request):
     """Get a city by a query string"""
     result = {}
     errors = ''
@@ -113,6 +114,76 @@ def get(request):
     return HttpResponse(json.dumps(result), content_type='application/json; charset=utf8')
 
 
+@csrf_exempt
 @require_POST
-def edit(request):
-    pass
+def edit(request, city_id):
+    """Edit city data, assuming only POST requests containing JSON data.
+
+    POST JSON:
+        {'id': String,
+         'name': String,
+         'province': String or None,
+         'state': String,
+         'code': String or None}
+    """
+    result = {}
+    errors = ''
+    if request.method == 'POST':
+        if request.is_ajax():
+            # check required fields: first_name, last_name, gender, birth_date, birth_place
+            try:
+                city_data = json.loads(request.body)
+                mandatory_fields_checked = True
+                for field in City.MANDATORY_FIELDS:
+                    try:
+                        if field not in city_data:
+                            errors += _('Field %s is mandatory\n' % field)
+                            mandatory_fields_checked = False
+                    except Exception, e:
+                        errors += u'%s\n' % e
+                        print errors
+                if not mandatory_fields_checked:
+                    result[ERRORS_KEY] = errors
+                    result[SUCCESS_KEY] = False
+                else:
+                    try:
+                        city_form = CityForm(city_data)
+                        if city_form.is_valid():
+                            cleaned_data = city_form.cleaned_data
+                            try:
+                                city = City.objects.filter(pk=city_id)
+                                city.update(**cleaned_data)
+                                city = city[0]
+                                result[SUCCESS_KEY] = True
+                                result[MESSAGE_KEY] = _('City %s successfully updated' % city.pk)
+                                result[DATA_KEY] = city.to_dictionary()
+                            except Exception, e:
+                                errors += u'%s\n' % e
+                                result[ERRORS_KEY] = errors
+                                result[SUCCESS_KEY] = False
+                                print errors
+                        else:
+                            for error in city_form.errors:
+                                errors += u'%s: %s' % (error, city_form.errors[error])
+                            result[ERRORS_KEY] = errors
+                            result[SUCCESS_KEY] = False
+                            print errors
+                    except Exception, e:
+                        errors += u'%s\n' % e
+                        result[ERRORS_KEY] = errors
+                        result[SUCCESS_KEY] = False
+                        print errors
+            except Exception, e:
+                errors += u'%s\n' % e
+                result[ERRORS_KEY] = errors
+                result[SUCCESS_KEY] = False
+                print errors
+        else:
+            result[ERRORS_KEY] = _('Ajax data required.\n')
+            result[SUCCESS_KEY] = False
+            print errors
+    else:
+        result[ERRORS_KEY] = _('POST method required.\n')
+        result[SUCCESS_KEY] = False
+        print errors
+    return HttpResponse(json.dumps(result), content_type='application/json; charset=utf8')

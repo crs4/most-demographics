@@ -8,6 +8,7 @@ from datetime import date, datetime
 from django.db.models import Q
 from ..models import Patient, Identifier
 from . import SUCCESS_KEY, MESSAGE_KEY, ERRORS_KEY, DATA_KEY, TOTAL_KEY
+from ..forms import IdentifierForm
 
 
 @csrf_exempt
@@ -74,7 +75,7 @@ def new(request):
 
 
 @require_GET
-def get(request):
+def filter(request):
     """Get a identifier by a query string"""
     result = {}
     errors = ''
@@ -110,9 +111,71 @@ def get(request):
     return HttpResponse(json.dumps(result), content_type='application/json; charset=utf8')
 
 
+@csrf_exempt
 @require_POST
-def edit(request):
-    pass
+def edit(request, identifier_id):
+    """Edit identifier data, assuming only POST requests containing JSON data.
+
+    POST JSON:
+        {'id': String,
+         'type': String or None,
+         'domain': String or None,
+         'identifier': String}
+    """
+    result = {}
+    errors = ''
+    if request.method == 'POST':
+        if request.is_ajax():
+            # check required fields: first_name, last_name, gender, birth_date, birth_place
+            try:
+                identifier_data = json.loads(request.body)
+                mandatory_fields_checked = True
+                for field in Identifier.MANDATORY_FIELDS:
+                    try:
+                        if field not in identifier_data:
+                            errors += _('Field %s is mandatory\n' % field)
+                            mandatory_fields_checked = False
+                    except Exception, e:
+                        errors += u'%s\n' % e
+                if not mandatory_fields_checked:
+                    result[ERRORS_KEY] = errors
+                    result[SUCCESS_KEY] = False
+                else:
+                    try:
+                        identifier_form = IdentifierForm(identifier_data)
+                        if identifier_form.is_valid():
+                            cleaned_data = identifier_form.cleaned_data
+                            try:
+                                identifier = Identifier.objects.filter(pk=identifier_id)
+                                identifier.update(**cleaned_data)
+                                identifier = identifier[0]
+                                result[SUCCESS_KEY] = True
+                                result[MESSAGE_KEY] = _('Identifier %s successfully updated' % identifier.pk)
+                                result[DATA_KEY] = identifier.to_dictionary()
+                            except Exception, e:
+                                errors += u'%s\n' % e
+                                result[ERRORS_KEY] = errors
+                                result[SUCCESS_KEY] = False
+                        else:
+                            for error in identifier_form.errors:
+                                errors += u'%s: %s' % (error, identifier_form.errors[error])
+                            result[ERRORS_KEY] = errors
+                            result[SUCCESS_KEY] = False
+                    except Exception, e:
+                        errors += u'%s\n' % e
+                        result[ERRORS_KEY] = errors
+                        result[SUCCESS_KEY] = False
+            except Exception, e:
+                errors += u'%s\n' % e
+                result[ERRORS_KEY] = errors
+                result[SUCCESS_KEY] = False
+        else:
+            result[ERRORS_KEY] = _('Ajax data required.\n')
+            result[SUCCESS_KEY] = False
+    else:
+        result[ERRORS_KEY] = _('POST method required.\n')
+        result[SUCCESS_KEY] = False
+    return HttpResponse(json.dumps(result), content_type='application/json; charset=utf8')
 
 
 def get_patient(request):

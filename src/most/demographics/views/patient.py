@@ -86,7 +86,7 @@ def new(request):
 
 
 @require_GET
-def get(request):
+def filter(request):
     """Get a patient by a query string"""
     result = {}
     errors = ''
@@ -144,6 +144,7 @@ def edit(request, patient_id):
          'certified_email': String or None,
          'active': True | False}
     """
+    # TODO remove prints
     result = {}
     errors = ''
     if request.method == 'POST':
@@ -159,23 +160,28 @@ def edit(request, patient_id):
                             mandatory_fields_checked = False
                     except Exception, e:
                         errors += u'%s\n' % e
+                        print errors
                 if not mandatory_fields_checked:
                     result[ERRORS_KEY] = errors
                     result[SUCCESS_KEY] = False
+                    print errors
                 else:
                     try:
                         if 'other_ids' in patient_data:
                             other_ids = patient_data.pop('other_ids')
                         else:
                             other_ids = None
-                        patient_data['birth_place'] = City.objects.get(pk=patient_data['birth_place'])
-                        patient_data['city'] = City.objects.get(pk=patient_data['city'])
+                        if 'birth_place' in patient_data:
+                            patient_data['birth_place'] = u'%s' % patient_data['birth_place']
+                        if 'city' in patient_data:
+                            patient_data['city'] = u'%s' % patient_data['city']
                         patient_form = PatientForm(patient_data)
                         if patient_form.is_valid():
                             cleaned_data = patient_form.cleaned_data
                             try:
-                                patient = Patient.objects.get(pk=patient_id)
+                                patient = Patient.objects.filter(pk=patient_id)
                                 patient.update(**cleaned_data)
+                                patient = patient[0]
                                 patient.other_ids.clear()
                                 patient.save()
                                 if other_ids:
@@ -183,26 +189,37 @@ def edit(request, patient_id):
                                         patient.other_ids.add(identifier)
                                     patient.save()
                                 result[SUCCESS_KEY] = True
-                                result[MESSAGE_KEY] = _('Patient %s successfully created' % patient.pk)
+                                result[MESSAGE_KEY] = _('Patient %s successfully updated' % patient.pk)
                                 result[DATA_KEY] = patient.to_dictionary()
                             except Exception, e:
                                 errors += u'%s\n' % e
                                 result[ERRORS_KEY] = errors
                                 result[SUCCESS_KEY] = False
+                                print errors
+                        else:
+                            for error in patient_form.errors:
+                                errors += u'%s: %s' % (error, patient_form.errors[error])
+                            result[ERRORS_KEY] = errors
+                            result[SUCCESS_KEY] = False
+                            print errors
                     except Exception, e:
                         errors += u'%s\n' % e
                         result[ERRORS_KEY] = errors
                         result[SUCCESS_KEY] = False
+                        print errors
             except Exception, e:
                 errors += u'%s\n' % e
                 result[ERRORS_KEY] = errors
                 result[SUCCESS_KEY] = False
+                print errors
         else:
             result[ERRORS_KEY] = _('Ajax data required.\n')
             result[SUCCESS_KEY] = False
+            print errors
     else:
         result[ERRORS_KEY] = _('POST method required.\n')
         result[SUCCESS_KEY] = False
+        print errors
     return HttpResponse(json.dumps(result), content_type='application/json; charset=utf8')
 
 

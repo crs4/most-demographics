@@ -236,7 +236,7 @@ class Patient(models.Model):
             'first_name': u'%s' % self.first_name,
             'last_name': u'%s' % self.last_name,
             'other_ids': [],
-            'gender': u'%s' % self.get_gender_display(),
+            'gender': u'%s' % self.gender,  # self.get_gender_display(),
             'birth_date': birth_date,
             #'birth_date': u'%s' % self.birth_date if self.birth_date else None,
             'birth_place': self.birth_place.to_dictionary() if self.birth_place else None,
