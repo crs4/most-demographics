@@ -269,6 +269,108 @@ $(document).ready(function () {
         return false;
     });
 
+
+    $('#edit_identifier_form').submit(function (event) {
+        event.preventDefault();
+        console.log('In edit_identifier_form submit');
+        var patientArrayData = $('#edit_identifier_form').serialize().split("&");
+        var patientObject = {};
+        var patientKW;
+        for (var i = 0; i < patientArrayData.length; i++) {
+            patientKW = patientArrayData[i].split("=");
+            patientObject[patientKW[0]] = decodeURIComponent(patientKW[1]).replace(/\+/g, ' ');
+        }
+        var patientJsonData = JSON.stringify(patientObject);
+        $.ajax({
+            url: '/demographics/identifier/' + $( '#search_identifier_id' ).val() + '/edit/',
+            type: 'POST',
+            data: patientJsonData,
+            dataType: 'text',
+            success: function (data, textStatus, jqXHR) {
+                var jsonData = JSON.parse(data);
+                var beautifiedData = JSON.stringify(jsonData, null, 4);
+                $('#edit_identifier_result_body').html('<div><pre class="pre-scrollable">' + beautifiedData + '</pre></div>');
+                if (jsonData.success) {
+                    if ($('#edit_identifier_result').hasClass('panel-danger')) {
+                        $('#edit_identifier_result').removeClass('panel-danger');
+                    }
+                    if (!$('#edit_identifier_result').hasClass('panel-success')) {
+                        $('#edit_identifier_result').addClass('panel-success');
+                    }
+                }
+                else {
+                    if ($('#edit_identifier_result').hasClass('panel-success')) {
+                        $('#edit_identifier_result').removeClass('panel-success');
+                    }
+                    if (!$('#edit_identifier_result').hasClass('panel-danger')) {
+                        $('#edit_identifier_result').addClass('panel-danger');
+                    }
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                $('#edit_identifier_result_body').html('<div>' + textStatus + ': ' + errorThrown + '</div>');
+                if ($('#edit_identifier_result').hasClass('panel-success')) {
+                    $('#edit_identifier_result').removeClass('panel-success');
+                }
+                if (!$('#edit_identifier_result').hasClass('panel-danger')) {
+                    $('#edit_identifier_result').addClass('panel-danger');
+                }
+            }
+        });
+        return false;
+    });
+
+
+    $('#edit_city_form').submit(function (event) {
+        event.preventDefault();
+        console.log('In edit_city_form submit');
+        var patientArrayData = $('#edit_city_form').serialize().split("&");
+        var patientObject = {};
+        var patientKW;
+        for (var i = 0; i < patientArrayData.length; i++) {
+            patientKW = patientArrayData[i].split("=");
+            patientObject[patientKW[0]] = decodeURIComponent(patientKW[1]).replace(/\+/g, ' ');
+        }
+        var patientJsonData = JSON.stringify(patientObject);
+        $.ajax({
+            url: '/demographics/city/' + $( '#search_city_id' ).val() + '/edit/',
+            type: 'POST',
+            data: patientJsonData,
+            dataType: 'text',
+            success: function (data, textStatus, jqXHR) {
+                var jsonData = JSON.parse(data);
+                var beautifiedData = JSON.stringify(jsonData, null, 4);
+                $('#edit_city_result_body').html('<div><pre class="pre-scrollable">' + beautifiedData + '</pre></div>');
+                if (jsonData.success) {
+                    if ($('#edit_city_result').hasClass('panel-danger')) {
+                        $('#edit_city_result').removeClass('panel-danger');
+                    }
+                    if (!$('#edit_city_result').hasClass('panel-success')) {
+                        $('#edit_city_result').addClass('panel-success');
+                    }
+                }
+                else {
+                    if ($('#edit_city_result').hasClass('panel-success')) {
+                        $('#edit_city_result').removeClass('panel-success');
+                    }
+                    if (!$('#edit_city_result').hasClass('panel-danger')) {
+                        $('#edit_city_result').addClass('panel-danger');
+                    }
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                $('#edit_city_result_body').html('<div>' + textStatus + ': ' + errorThrown + '</div>');
+                if ($('#edit_city_result').hasClass('panel-success')) {
+                    $('#edit_city_result').removeClass('panel-success');
+                }
+                if (!$('#edit_city_result').hasClass('panel-danger')) {
+                    $('#edit_city_result').addClass('panel-danger');
+                }
+            }
+        });
+        return false;
+    });
+
     $( "#get_city_field" ).keypress(function(event) {
         if (event.keyCode == 13) {
             getCity();
@@ -350,6 +452,91 @@ $(document).ready(function () {
     });
 
 
+    $( "#search_identifier" ).autocomplete({
+        source: function( request, response ) {
+            $.ajax({
+                url: "/demographics/identifier/get/",
+                dataType: "json",
+                data: {
+                    query_string: request.term
+                },
+                success: function( data ) {
+                    response( $.map( data.data, function( item ) {
+                        return {
+                            label: '[' + item.type + '] ' + item.identifier + '@' + item.domain,
+                            value: item.id,
+                            type: item.type,
+                            identifier: item.identifier,
+                            domain: item.domain
+                        }
+                    }));
+                }
+            });
+        },
+        /*focus: function( event, ui ) {
+            $( "#birth_place" ).val( ui.item.label );
+            return false;
+        },*/
+        select: function( event, ui ) {
+            $( "#search_identifier" ).val( ui.item.label );
+            $( "#search_identifier_id" ).val( ui.item.value );
+            $( "#edit_type" ).val( ui.item.type );
+            $( "#edit_identifier" ).val( ui.item.identifier );
+            $( "#edit_domain" ).val( ui.item.domain );
+            return false;
+        },
+        minLength: 2,
+        open: function() {
+            $( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
+        },
+        close: function() {
+            $( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
+        }
+    });
+
+    $( "#search_city" ).autocomplete({
+        source: function( request, response ) {
+            $.ajax({
+                url: "/demographics/city/get/",
+                dataType: "json",
+                data: {
+                    query_string: request.term
+                },
+                success: function( data ) {
+                    response( $.map( data.data, function( item ) {
+                        return {
+                            label: item.name + '-' + item.code + '('+ item.province +')' + ', ' + item.state,
+                            value: item.id,
+                            name: item.name,
+                            province: item.province,
+                            state: item.state,
+                            code: item.code
+                        }
+                    }));
+                }
+            });
+        },
+        /*focus: function( event, ui ) {
+            $( "#birth_place" ).val( ui.item.label );
+            return false;
+        },*/
+        select: function( event, ui ) {
+            $( "#search_city" ).val( ui.item.label );
+            $( "#search_city_id" ).val( ui.item.value );
+            $( "#edit_name" ).val( ui.item.name );
+            $( "#edit_province" ).val( ui.item.province );
+            $( "#edit_state" ).val( ui.item.state );
+            $( "#edit_code" ).val( ui.item.code );
+            return false;
+        },
+        minLength: 2,
+        open: function() {
+            $( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
+        },
+        close: function() {
+            $( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
+        }
+    });
 
     $( "#birth_place" ).autocomplete({
         source: function( request, response ) {
