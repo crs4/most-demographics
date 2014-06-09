@@ -6,20 +6,6 @@ from utils import make_new_uid
 import string
 
 
-class IdentifierManager(models.Manager):
-    def create_by_json(self, identifier_json_data):
-        """Create identifier starting from json structured data.
-
-        Args:
-            identifier_json_data: dictionary with identifier data
-
-        Returns:
-            new Identifier object
-        """
-        identifier = self.create(**identifier_json_data)
-        return identifier
-
-
 class Identifier(models.Model):
     """Class Identifier
 
@@ -33,8 +19,6 @@ class Identifier(models.Model):
     type = models.CharField(_('Type'), max_length=50, null=True, blank=True)
     domain = models.CharField(_('Domain'), max_length=50, null=True, blank=True)
     identifier = models.CharField(_('Identifier'), max_length=50)
-    # add customized manager:
-    #objects = IdentifierManager()
 
     class Meta:
         unique_together = ('type', 'domain', 'identifier')
@@ -69,20 +53,6 @@ class Identifier(models.Model):
         return identifier_dictionary
 
 
-class CityManager(models.Manager):
-    def create_by_json(self, city_json_data):
-        """Create city starting from json structured data.
-
-        Args:
-            city_json_data: dictionary with city data
-
-        Returns:
-            new City object
-        """
-        city = self.create(**city_json_data)
-        return city
-
-
 class City(models.Model):
     """Class City
 
@@ -98,11 +68,9 @@ class City(models.Model):
     province = models.CharField(_('Province'), max_length=2, null=True, blank=True, help_text=_('Use 2 letters format')) # No control on existence of the province
     state = models.CharField(_('State'), max_length=50, help_text=_('Mandatory'))
     code = models.CharField(_('Code'), max_length=5, null=True, blank=True, help_text=_('e.g. C.A.P., ZIP, etc.'))
-    # add customized manager:
-    #objects = CityManager()
 
     class Meta:
-        unique_together = (('code', 'name', 'province', 'state'), ('code', 'state'))
+        unique_together = ('code', 'name', 'province', 'state')
         verbose_name = _('city')
         verbose_name_plural = _('cities')
 
@@ -268,7 +236,7 @@ class Patient(models.Model):
             'first_name': u'%s' % self.first_name,
             'last_name': u'%s' % self.last_name,
             'other_ids': [],
-            'gender': u'%s' % self.get_gender_display(),
+            'gender': u'%s' % self.gender,  # self.get_gender_display(),
             'birth_date': birth_date,
             #'birth_date': u'%s' % self.birth_date if self.birth_date else None,
             'birth_place': self.birth_place.to_dictionary() if self.birth_place else None,

@@ -16,10 +16,10 @@ class CityForm(forms.Form):
 
 
 class PatientForm(forms.Form):
-    account_number = forms.CharField(max_length=16)
+    account_number = forms.CharField(max_length=16, required=False)
     first_name = forms.CharField(max_length=50)
     last_name = forms.CharField(max_length=50)
-    other_ids = forms.ModelMultipleChoiceField(queryset=Identifier.objects.all())
+    # other_ids = forms.ModelMultipleChoiceField(queryset=Identifier.objects.all(), required=False)
     gender = forms.ChoiceField(choices=Patient.GENDER_CHOICES)
     birth_date = forms.DateField() # input_formats=['%Y-%m-%d', '%m/%d/%Y', '%m/%d/%y', '%d/%m/%Y', '%d-%m-%Y']
     birth_place = forms.ModelChoiceField(queryset=City.objects.all())
