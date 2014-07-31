@@ -1,3 +1,11 @@
+#
+# Project MOST - Moving Outcomes to Standard Telemedicine Practice
+# http://most.crs4.it/
+#
+# Copyright 2014, CRS4 srl. (http://www.crs4.it/)
+# Dual licensed under the MIT or GPL Version 2 licenses.
+# See license-GPLv2.txt or license-MIT.txt
+
 # -*- coding: utf-8 -*-
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -283,7 +291,7 @@ def set_birth_place(request, patient_id):
                 # patient = set_cities(patient, 'birth_place', birth_place_data['id'])
                 # patient.save()
                 result[SUCCESS_KEY] = True
-                result[MESSAGE_KEY] = _('Patient %s has changed to %s' % (patient_id, birth_place.pk))
+                #result[MESSAGE_KEY] = _('Patient %s has changed to %s' % (patient_id, birth_place.pk))
                 result[DATA_KEY] = patient.to_dictionary()
             except Exception, e:
                 errors += u'%s\n' % e
