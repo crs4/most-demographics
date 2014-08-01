@@ -1,6 +1,35 @@
-Examples
-========
 
+Demographics
+============
+
+Getting started
+---------------
+
+Installation
+~~~~~~~~~~~~
+
+**Demographics** is a Django application, indipendent from any Django
+project.
+
+To use **Demographics** in your project, add it to ``INSTALLED_APPS`` in
+your settings.py file.
+
+.. code:: python
+
+    INSTALLED_APPS = (
+        'django.contrib.admin',
+        'django.contrib.auth',
+        'django.contrib.contenttypes',
+        'django.contrib.sessions',
+        'django.contrib.messages',
+        'django.contrib.staticfiles',
+        # ...
+        # your apps go here
+        # ...
+        'demographics',The following **HowTo** makes use of `requests` and `json` module.
+    
+    The sample blocks of code illustrate how to use them making use of the **[helper shown in this module](http://localhost:8888/notebooks/DemographicsHelper.ipynb)**
+    )
 REST APIs
 ~~~~~~~~~
 
@@ -67,8 +96,6 @@ Identifier module provides the following web API:
     identifier_id = identifier['data'][0]['id']
     edited_identifier = compose_post_request(HOST_ADDRESS, '/demographics/identifier/%s/edit/' % identifier_id, IDENTIFIER_DATA)
     print_response_data('identifier', edited_identifier)
-    
-
 City module
 ^^^^^^^^^^^
 
@@ -127,8 +154,6 @@ City module provides the following web API:
     city_id = city['data'][0]['id']
     edited_city = compose_post_request(HOST_ADDRESS, '/demographics/city/%s/edit/' % city_id, CITY_DATA)
     print_response_data('city', edited_city)
-    
-    
 Patient module
 ^^^^^^^^^^^^^^
 
@@ -214,4 +239,3 @@ Patient module provides the following web API:
     patient_id = patient['data'][0]['id']
     edited_patient = compose_post_request(HOST_ADDRESS, '/demographics/patient/%s/edit/' % patient_id, PATIENT_DATA)
     print_response_data('patient', edited_patient)
-
