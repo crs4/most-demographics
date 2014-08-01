@@ -1,0 +1,250 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-05-26 16:30+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: demographics/models.py:33
+msgid "Type"
+msgstr ""
+
+#: demographics/models.py:34
+msgid "Domain"
+msgstr ""
+
+#: demographics/models.py:35
+msgid "Identifier"
+msgstr ""
+
+#: demographics/models.py:41
+msgid "identifier"
+msgstr ""
+
+#: demographics/models.py:42
+msgid "identifiers"
+msgstr ""
+
+#: demographics/models.py:97
+msgid "Name"
+msgstr ""
+
+#: demographics/models.py:98
+msgid "Province"
+msgstr ""
+
+#: demographics/models.py:98
+msgid "Use 2 letters format"
+msgstr ""
+
+#: demographics/models.py:99
+msgid "State"
+msgstr ""
+
+#: demographics/models.py:99
+msgid "Mandatory"
+msgstr ""
+
+#: demographics/models.py:100
+msgid "Code"
+msgstr ""
+
+#: demographics/models.py:100
+msgid "e.g. C.A.P., ZIP, etc."
+msgstr ""
+
+#: demographics/models.py:106
+msgid "city"
+msgstr ""
+
+#: demographics/models.py:107
+msgid "cities"
+msgstr ""
+
+#: demographics/models.py:177
+msgid "Male"
+msgstr ""
+
+#: demographics/models.py:178
+msgid "Female"
+msgstr ""
+
+#: demographics/models.py:183
+msgid "National Tax Code"
+msgstr ""
+
+#: demographics/models.py:183
+msgid "e.g. SSN"
+msgstr ""
+
+#: demographics/models.py:184
+msgid "First name"
+msgstr ""
+
+#: demographics/models.py:185
+msgid "Last name"
+msgstr ""
+
+#: demographics/models.py:186
+msgid "Other IDs"
+msgstr ""
+
+#: demographics/models.py:187
+msgid "Gender"
+msgstr ""
+
+#: demographics/models.py:188
+msgid "Birth date"
+msgstr ""
+
+#: demographics/models.py:189
+msgid "Birth place"
+msgstr ""
+
+#: demographics/models.py:190
+msgid "Address"
+msgstr ""
+
+#: demographics/models.py:192
+msgid "Phone"
+msgstr ""
+
+#: demographics/models.py:193
+msgid "Mobile phone"
+msgstr ""
+
+#: demographics/models.py:194
+msgid "Email"
+msgstr ""
+
+#: demographics/models.py:195
+msgid "Certified email"
+msgstr ""
+
+#: demographics/models.py:199
+msgid "Is the patient active?"
+msgstr ""
+
+#: demographics/models.py:202
+msgid "patient"
+msgstr ""
+
+#: demographics/models.py:203
+msgid "patients"
+msgstr ""
+
+#: demographics/views/city.py:43
+#, python-format
+msgid "Field %s is mandatory.\n"
+msgstr ""
+
+#: demographics/views/city.py:58
+#, python-format
+msgid "City %s successfully created."
+msgstr ""
+
+#: demographics/views/city.py:62
+msgid "Unable to save city."
+msgstr ""
+
+#: demographics/views/city.py:66
+#, python-format
+msgid "City %s already exists."
+msgstr ""
+
+#: demographics/views/city.py:77 demographics/views/identifier.py:76
+#: demographics/views/patient.py:89 demographics/views/patient.py:213
+#: demographics/views/patient.py:240 demographics/views/patient.py:263
+msgid "POST method required.\n"
+msgstr ""
+
+#: demographics/views/city.py:80 demographics/views/identifier.py:79
+#: demographics/views/patient.py:93 demographics/views/patient.py:217
+msgid "Ajax data required.\n"
+msgstr ""
+
+#: demographics/views/city.py:107
+#, python-format
+msgid "%(cities_count)s cities found for query string: '%(query_string)s'"
+msgstr ""
+
+#: demographics/views/city.py:111 demographics/views/identifier.py:109
+#, python-format
+msgid "No cities found for query string: '%s'"
+msgstr ""
+
+#: demographics/views/city.py:118 demographics/views/identifier.py:116
+#: demographics/views/patient.py:130
+msgid "GET method required.\n"
+msgstr ""
+
+#: demographics/views/identifier.py:42 demographics/views/patient.py:52
+#: demographics/views/patient.py:167
+#, python-format
+msgid "Field %s is mandatory\n"
+msgstr ""
+
+#: demographics/views/identifier.py:57
+#, python-format
+msgid "Identifier %s successfully created."
+msgstr ""
+
+#: demographics/views/identifier.py:61
+msgid "Unable to save identifier."
+msgstr ""
+
+#: demographics/views/identifier.py:65
+#, python-format
+msgid "Identifier %s already exists."
+msgstr ""
+
+#: demographics/views/identifier.py:105
+#, python-format
+msgid ""
+"%(identifiers_count)s identifiers found for query string: '%(query_string)s'"
+msgstr ""
+
+#: demographics/views/patient.py:75 demographics/views/patient.py:195
+#, python-format
+msgid "Patient %s successfully created"
+msgstr ""
+
+#: demographics/views/patient.py:119
+#, python-format
+msgid "%(patients_count)s patients found with query string: '%(query_string)s'"
+msgstr ""
+
+#: demographics/views/patient.py:123
+#, python-format
+msgid "No patients found for query string: '%s'"
+msgstr ""
+
+#: demographics/views/patient.py:233
+#, python-format
+msgid "Patient %s is active"
+msgstr ""
+
+#: demographics/views/patient.py:256
+#, python-format
+msgid "Patient %s is not active"
+msgstr ""
+
+#: most/settings.py:107
+msgid "Italian"
+msgstr ""
+
+#: most/settings.py:108
+msgid "English"
+msgstr ""
