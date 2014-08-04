@@ -7,5 +7,6 @@ install:
   - pip install -q Django==$DJANGO --use-mirrors
 before_script:
   - cd examples/most/
+  - cp main/settings.py.default main/settings.py
 script:
   - PYTHONPATH=.. python manage.py test most.web.demographics
