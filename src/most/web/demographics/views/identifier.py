@@ -14,9 +14,9 @@ from django.utils.translation import ugettext as _
 import json
 from datetime import date, datetime
 from django.db.models import Q
-from ..models import Patient, Identifier
+from most.web.demographics.models import Patient, Identifier
 from . import SUCCESS_KEY, MESSAGE_KEY, ERRORS_KEY, DATA_KEY, TOTAL_KEY
-from ..forms import IdentifierForm
+from most.web.demographics.forms import IdentifierForm
 
 
 @csrf_exempt

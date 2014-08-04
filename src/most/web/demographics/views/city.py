@@ -14,8 +14,8 @@ from django.utils.translation import ugettext as _
 import json
 from datetime import date, datetime
 from django.db.models import Q
-from ..models import City
-from ..forms import CityForm
+from most.web.demographics.models import City
+from most.web.demographics.forms import CityForm
 from . import SUCCESS_KEY, MESSAGE_KEY, ERRORS_KEY, DATA_KEY, TOTAL_KEY
 
 

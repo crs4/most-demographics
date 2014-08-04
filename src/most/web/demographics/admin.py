@@ -8,7 +8,7 @@
 # See license-GPLv2.txt or license-MIT.txt
 
 from django.contrib import admin
-from demographics.models import Patient, City, Identifier
+from most.web.demographics.models import Patient, City, Identifier
 
 
 class PatientAdmin(admin.ModelAdmin):
