@@ -58,4 +58,4 @@ docs/_build/
 .ipynb_checkpoints
 .idea
 *.sqlite3
-examples/most/most/settings.py
+settings.py
