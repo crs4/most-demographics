@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #
 # Project MOST - Moving Outcomes to Standard Telemedicine Practice
 # http://most.crs4.it/
@@ -6,7 +7,6 @@
 # Dual licensed under the MIT or GPL Version 2 licenses.
 # See license-GPLv2.txt or license-MIT.txt
 
-# -*- coding: utf-8 -*-
 from django.conf.urls import patterns, include, url
 from demographics.views import patient, city, identifier
 
