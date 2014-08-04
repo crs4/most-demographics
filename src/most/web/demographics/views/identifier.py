@@ -7,7 +7,6 @@
 # See license-GPLv2.txt or license-MIT.txt
 
 # -*- coding: utf-8 -*-
-
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST, require_GET
@@ -15,34 +14,33 @@ from django.utils.translation import ugettext as _
 import json
 from datetime import date, datetime
 from django.db.models import Q
-from ..models import City
-from ..forms import CityForm
+from most.web.demographics.models import Patient, Identifier
 from . import SUCCESS_KEY, MESSAGE_KEY, ERRORS_KEY, DATA_KEY, TOTAL_KEY
+from most.web.demographics.forms import IdentifierForm
 
 
 @csrf_exempt
 @require_POST
 def new(request):
-    """Add new city, assuming only POST requests containing JSON data.
+    """Add new identifier, assuming only POST requests containing JSON data.
 
     POST JSON:
-        {'name': String,
-         'province': String or None,
-         'state': String,
-         'code': String or None}
+        {'type': String or None,
+         'domain': String or None,
+         'identifier': String}
     """
     result = {}
     errors = ''
     if request.is_ajax():
         if request.method == 'POST':
-            # check required fields: name, state
+            # check required fields: identifier
             try:
-                city_data = json.loads(request.body)
+                identifier_data = json.loads(request.body)
                 mandatory_fields_checked = True
-                for field in City.MANDATORY_FIELDS:
+                for field in Identifier.MANDATORY_FIELDS:
                     try:
-                        if field not in city_data or not city_data[field]:
-                            errors += _('Field %s is mandatory.\n' % field)
+                        if field not in identifier_data:
+                            errors += _('Field %s is mandatory\n' % field)
                             mandatory_fields_checked = False
                     except Exception, e:
                         errors += u'%s\n' % e
@@ -51,22 +49,22 @@ def new(request):
                     result[SUCCESS_KEY] = False
                 else:
                     try:
-                        cities = City.objects.filter(**city_data)
-                        if not cities:
-                            city = City(**city_data)
-                            city.save()
-                            if city.pk:
+                        identifiers = Identifier.objects.filter(**identifier_data)
+                        if not identifiers:
+                            identifier = Identifier(**identifier_data)
+                            identifier.save()
+                            if identifier.pk:
                                 result[SUCCESS_KEY] = True
-                                result[MESSAGE_KEY] = _('City %s successfully created.' % city.pk)
-                                result[DATA_KEY] = city.to_dictionary()
+                                result[MESSAGE_KEY] = _('Identifier %s successfully created.' % identifier.pk)
+                                result[DATA_KEY] = identifier.to_dictionary()
                             else:
                                 result[SUCCESS_KEY] = False
-                                result[ERRORS_KEY] = _('Unable to save city.')
+                                result[ERRORS_KEY] = _('Unable to save identifier.')
                         else:
-                            city = cities[0]
+                            identifier = identifiers[0]
                             result[SUCCESS_KEY] = True
-                            result[MESSAGE_KEY] = _('City %s already exists.' % city.pk)
-                            result[DATA_KEY] = city.to_dictionary()
+                            result[MESSAGE_KEY] = _('Identifier %s already exists.' % identifier.pk)
+                            result[DATA_KEY] = identifier.to_dictionary()
                     except Exception, e:
                         errors += u'%s\n' % e
                         result[ERRORS_KEY] = errors
@@ -86,7 +84,7 @@ def new(request):
 
 @require_GET
 def filter(request):
-    """Get a city by a query string"""
+    """Get a identifier by a query string"""
     result = {}
     errors = ''
     query_set = (Q())
@@ -96,19 +94,18 @@ def filter(request):
             query_list = [query for query in query_string.split(' ') if query]
             for query in query_list:
                 query_set = query_set & (
-                    Q(name__icontains=query) |
-                    Q(province__icontains=query) |
-                    Q(state__icontains=query) |
-                    Q(code__icontains=query)
+                    Q(type__icontains=query) |
+                    Q(domain__icontains=query) |
+                    Q(identifier__icontains=query)
                 )
-            cities = City.objects.filter(query_set)
+            identifiers = Identifier.objects.filter(query_set)
             result[DATA_KEY] = []
-            for city in cities:
-                result[DATA_KEY].append(city.to_dictionary())
+            for identifier in identifiers:
+                result[DATA_KEY].append(identifier.to_dictionary())
             if result[DATA_KEY]:
-                result[MESSAGE_KEY] = _('%(cities_count)s cities found for query string: \'%(query_string)s\'' %
-                                        {'cities_count': cities.count(), 'query_string': query_string})
-                result[TOTAL_KEY] = cities.count()
+                result[MESSAGE_KEY] = _('%(identifiers_count)s identifiers found for query string: \'%(query_string)s\''
+                                        % {'identifiers_count': identifiers.count(), 'query_string': query_string})
+                result[TOTAL_KEY] = identifiers.count()
             else:
                 result[MESSAGE_KEY] = _('No cities found for query string: \'%s\'' % query_string)
             result[SUCCESS_KEY] = True
@@ -124,15 +121,14 @@ def filter(request):
 
 @csrf_exempt
 @require_POST
-def edit(request, city_id):
-    """Edit city data, assuming only POST requests containing JSON data.
+def edit(request, identifier_id):
+    """Edit identifier data, assuming only POST requests containing JSON data.
 
     POST JSON:
         {'id': String,
-         'name': String,
-         'province': String or None,
-         'state': String,
-         'code': String or None}
+         'type': String or None,
+         'domain': String or None,
+         'identifier': String}
     """
     result = {}
     errors = ''
@@ -140,58 +136,55 @@ def edit(request, city_id):
         if request.is_ajax():
             # check required fields: first_name, last_name, gender, birth_date, birth_place
             try:
-                city_data = json.loads(request.body)
+                identifier_data = json.loads(request.body)
                 mandatory_fields_checked = True
-                for field in City.MANDATORY_FIELDS:
+                for field in Identifier.MANDATORY_FIELDS:
                     try:
-                        if field not in city_data:
+                        if field not in identifier_data:
                             errors += _('Field %s is mandatory\n' % field)
                             mandatory_fields_checked = False
                     except Exception, e:
                         errors += u'%s\n' % e
-                        print errors
                 if not mandatory_fields_checked:
                     result[ERRORS_KEY] = errors
                     result[SUCCESS_KEY] = False
                 else:
                     try:
-                        city_form = CityForm(city_data)
-                        if city_form.is_valid():
-                            cleaned_data = city_form.cleaned_data
+                        identifier_form = IdentifierForm(identifier_data)
+                        if identifier_form.is_valid():
+                            cleaned_data = identifier_form.cleaned_data
                             try:
-                                city = City.objects.filter(pk=city_id)
-                                city.update(**cleaned_data)
-                                city = city[0]
+                                identifier = Identifier.objects.filter(pk=identifier_id)
+                                identifier.update(**cleaned_data)
+                                identifier = identifier[0]
                                 result[SUCCESS_KEY] = True
-                                result[MESSAGE_KEY] = _('City %s successfully updated' % city.pk)
-                                result[DATA_KEY] = city.to_dictionary()
+                                result[MESSAGE_KEY] = _('Identifier %s successfully updated' % identifier.pk)
+                                result[DATA_KEY] = identifier.to_dictionary()
                             except Exception, e:
                                 errors += u'%s\n' % e
                                 result[ERRORS_KEY] = errors
                                 result[SUCCESS_KEY] = False
-                                print errors
                         else:
-                            for error in city_form.errors:
-                                errors += u'%s: %s' % (error, city_form.errors[error])
+                            for error in identifier_form.errors:
+                                errors += u'%s: %s' % (error, identifier_form.errors[error])
                             result[ERRORS_KEY] = errors
                             result[SUCCESS_KEY] = False
-                            print errors
                     except Exception, e:
                         errors += u'%s\n' % e
                         result[ERRORS_KEY] = errors
                         result[SUCCESS_KEY] = False
-                        print errors
             except Exception, e:
                 errors += u'%s\n' % e
                 result[ERRORS_KEY] = errors
                 result[SUCCESS_KEY] = False
-                print errors
         else:
             result[ERRORS_KEY] = _('Ajax data required.\n')
             result[SUCCESS_KEY] = False
-            print errors
     else:
         result[ERRORS_KEY] = _('POST method required.\n')
         result[SUCCESS_KEY] = False
-        print errors
     return HttpResponse(json.dumps(result), content_type='application/json; charset=utf8')
+
+
+def get_patient(request):
+    pass

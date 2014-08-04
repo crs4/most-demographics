@@ -9,7 +9,7 @@
 # -*- coding: utf-8 -*-
 from django.test import TestCase
 from django.core.urlresolvers import reverse
-from demographics.models import Patient, City, Identifier
+from most.web.demographics.models import Patient, City, Identifier
 import json
 from django.db.models import Q
 

@@ -8,7 +8,7 @@
 
 # -*- coding: utf-8 -*-
 from django.conf.urls import patterns, include, url
-from demographics.views import patient, city, identifier
+from most.web.demographics.views import patient, city, identifier
 
 from django.contrib import admin
 admin.autodiscover()

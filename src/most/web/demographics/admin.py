@@ -8,7 +8,7 @@
 
 # -*- coding: utf-8 -*-
 from django.contrib import admin
-from demographics.models import Patient, City, Identifier
+from most.web.demographics.models import Patient, City, Identifier
 
 
 class PatientAdmin(admin.ModelAdmin):
