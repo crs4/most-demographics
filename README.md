@@ -1,27 +1,17 @@
-The MOST project aims to achieve an open, modular and scalable solution for the creation, execution and management of remote clinical consultations with direct interaction between specialists.
+The MOST project aims to achieve an open, modular and scalable solution for the creation, execution and management of remote clinical consultations with direct interaction between specialists.  
 
 The project consists of a set of frameworks that deal with different aspects and technologies useful for the creation of telemedicine applications.
 
+Base Libraries:
+- [most](https://github.com/crs4/most): a collection of modules and webapp for user management, authentication, grouping ...
+Available framework:
+- [most-voip](https://github.com/crs4/most-voip): a fast and lightweight library created for handling VOIP sessions;
+- [most-demographics](https://github.com/crs4/most-demographics)
+- [most-medicalrecords](https://github.com/crs4/most-medicalrecords)
+- [most-streaming](https://github.com/crs4/most-streaming)
 
-Build status
-------------
+#Documentation#
 
-[![Build Status](https://travis-ci.org/crs4/most-demographics.png)](https://travis-ci.org/crs4/most-demographics)
+[![Documentation Status](https://readthedocs.org/projects/most-demographics/badge/?version=latest)](https://readthedocs.org/projects/most-demographics/?badge=latest)
 
-
-License
--------
-
-    /*!
-     * Project MOST - Moving Outcomes to Standard Telemedicine Practice
-     * http://most.crs4.it/
-     *
-     * Copyright 2014, CRS4 srl. (http://www.crs4.it/)
-     * Dual licensed under the MIT or GPL Version 2 licenses.
-     * See license-GPLv2.txt or license-MIT.txt
-     */
-
-See
-[GPL2:](https://www.gnu.org/licenses/gpl-2.0.txt)
-
-[MIT:](http://opensource.org/licenses/MIT)
+Documentation can be found [here](http://most-demographics.readthedocs.org/en/latest/)
