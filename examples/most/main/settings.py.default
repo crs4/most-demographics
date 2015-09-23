@@ -24,6 +24,9 @@ DEBUG = True
 
 TEMPLATE_DEBUG = True
 
+MLLP_HOST = "localhost"
+MLLP_PORT = 2575
+
 ALLOWED_HOSTS = []
 
 

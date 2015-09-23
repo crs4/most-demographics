@@ -7,6 +7,7 @@
 # Dual licensed under the MIT or GPL Version 2 licenses.
 # See license-GPLv2.txt or license-MIT.txt
 
+from django.conf import settings
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST, require_GET
@@ -16,8 +17,8 @@ from datetime import date, datetime
 from django.db.models import Q
 from most.web.demographics.models import Patient, City, Identifier
 from most.web.demographics.forms import PatientForm
+from most.web.demographics.utils import send_pdq_request
 from . import SUCCESS_KEY, MESSAGE_KEY, ERRORS_KEY, DATA_KEY, TOTAL_KEY
-
 
 @csrf_exempt
 @require_POST
@@ -120,6 +121,25 @@ def filter(request):
             else:
                 result[MESSAGE_KEY] = _('No patients found for query string: \'%s\'' % query_string)
             result[SUCCESS_KEY] = True
+        except Exception, e:
+            errors += u'%s\n' % e
+            result[ERRORS_KEY] = errors
+            result[SUCCESS_KEY] = False
+    else:
+        result[ERRORS_KEY] = _('GET method required.\n')
+        result[SUCCESS_KEY] = False
+    return HttpResponse(json.dumps(result), content_type='application/json; charset=utf8')
+
+
+@require_GET
+def get(request):
+    """Get a patient by a query string"""
+    result = {}
+    errors = ''
+    if request.method == 'GET':
+        try:
+            patient_id = request.GET['patient_id']
+            result = send_pdq_request(patient_id)
         except Exception, e:
             errors += u'%s\n' % e
             result[ERRORS_KEY] = errors

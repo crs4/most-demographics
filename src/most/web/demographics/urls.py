@@ -24,7 +24,8 @@ urlpatterns = patterns('',
 # Patient API related urls
 urlpatterns += patterns('',
     (r'^patient/new/$', patient.new),
-    (r'^patient/get/$', patient.filter),  # TODO add a "real" get api to get single patient
+    (r'^patient/get/$', patient.get),  # TODO add a "real" get api to get single patient
+    (r'^patient/filter/$', patient.filter),  # TODO add a "real" get api to get single patient
     (r'^patient/(?P<patient_id>\d+)/edit/$', patient.edit),
     (r'^patient/(?P<patient_id>\d+)/deactivate/$', patient.deactivate),
     (r'^patient/(?P<patient_id>\d+)/activate/$', patient.activate),
