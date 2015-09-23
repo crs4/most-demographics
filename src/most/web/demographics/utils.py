@@ -89,7 +89,6 @@ def send_pdq_request(patient_id):
 
 
 def parse_pdq_response(er7_message):
-    print er7_message
     msg = parse_message(er7_message, message_profile=_PDQ_RES_MP, validation_level=VL.TOLERANT)
 
     msg_status = msg.msa.msa_1.value
@@ -103,19 +102,20 @@ def parse_pdq_response(er7_message):
     patients = []
     for g in msg.rsp_k21_query_response:
         patient = {
-            "IDENTIFIERS": [],
-            "NAME": g.pid.pid_5.xpn_2.value,
-            "SURNAME": g.pid.pid_5.xpn_1.value,
-            "DATETIME_OF_BIRTH": g.pid.pid_7.ts_1.value,
-            "ADMINISTRATIVE_SEX": g.pid.pid_8.value,
-            "ACCOUNT_NUMBER": g.pid.pid_18.cx_1.value,
-            "BIRTH_PLACE": g.pid.pid_23.value
+            "id": g.pid.pid_3.cx_1.value,
+            "first_name": g.pid.pid_5.xpn_2.value,
+            "last_name": g.pid.pid_5.xpn_1.value,
+            "birth_date": g.pid.pid_7.ts_1.value,
+            "gender": g.pid.pid_8.value,
+            "account_number": g.pid.pid_18.cx_1.value,
+            "birth_place": g.pid.pid_23.value,
+            'city': g.pid.pid_11.xad_3.value,
+            'phone': g.pid.pid_13.xtn_1.value,
+            'mobile': "",
+            'email': g.pid.pid_13.xtn_4.value,
+            'certified_email': "",
+            'active': True
         }
-        for p in g.pid.pid_3:
-            patient["IDENTIFIERS"].append({
-                "DOMAIN": p.cx_4.hd_1.value.value,
-                "VALUE": p.cx_1.value
-            })
 
         patients.append(patient)
 

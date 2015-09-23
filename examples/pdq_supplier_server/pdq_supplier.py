@@ -65,6 +65,9 @@ class PDQHandler(AbstractHandler):
             s.pid_5 = "%s^%s" % (p["SURNAME"], p["NAME"])
             s.pid_7.ts_1 = p["DATETIME_OF_BIRTH"]
             s.pid_8 = p["ADMINISTRATIVE_SEX"]
+            s.pid_11.xad_3 = p["CITY"]
+            s.pid_13.xtn_1 = p["PHONE"]
+            s.pid_13.xtn_4 = p["EMAIL"]
             s.pid_18.cx_1 = p["ACCOUNT_NUMBER"]
             s.pid_23 = p["BIRTH_PLACE"]
         return res
