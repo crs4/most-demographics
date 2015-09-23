@@ -19,6 +19,7 @@ Identifier
       Create new identifier.
 
       :parameter json data: identifier data:
+
          {
             'type': String or None,
             'domain': String or None,
@@ -30,7 +31,6 @@ Identifier
          :parameter str `message`: a feedback string that would be displayed to the user
          :parameter str `errors`: an error string that explains the raised problems
          :parameter json `data`: if success is True, it contains the created identifier data in json format
-
 
    .. http:method:: GET /demographics/identifier/get/
 
@@ -44,12 +44,12 @@ Identifier
          :parameter str `errors`: an error string that explains the raised problems
          :parameter json `data`: if success is True, it contains the found identifiers data in json format
 
-
    .. http:method:: POST /demographics/identifier/(identifier_id)/edit/
 
       Edit the information of an identifier identified by `identifier_id`
 
       :parameter json data: identifier data:
+
          {
             'id': String,
             'type': String or None,
@@ -63,7 +63,6 @@ Identifier
          :parameter str `errors`: an error string that explains the raised problems
          :parameter json `data`: if success is True, it contains the edited identifier data in json format
 
-
 City
 ````
 
@@ -72,6 +71,7 @@ City
       Create new city.
 
       :parameter json data: city data:
+
          {
             'name': String,
             'province': String or None,
@@ -85,7 +85,6 @@ City
          :parameter str `errors`: an error string that explains the raised problems
          :parameter json `data`: if success is True, it contains the created city data in json format
 
-
    .. http:method:: GET /demographics/city/get/
 
       Get the information of a city
@@ -98,12 +97,12 @@ City
          :parameter str `errors`: an error string that explains the raised problems
          :parameter json `data`: if success is True, it contains the found cities data in json format
 
-
    .. http:method:: POST /demographics/city/(city_id)/edit/
 
       Edit the information of a city identified by `city_id`
 
       :parameter json data: city data:
+
          {
             'id': String,
             'name': String,
@@ -118,7 +117,6 @@ City
          :parameter str `errors`: an error string that explains the raised problems
          :parameter json `data`: if success is True, it contains the edited city data in json format
 
-
 Patient module
 ``````````````
 
@@ -127,6 +125,7 @@ Patient module
       Create new patient.
 
       :parameter json data: patient data:
+
          {
             'account_number': String or None,
             'first_name': String,
@@ -150,10 +149,21 @@ Patient module
          :parameter str `errors`: an error string that explains the raised problems
          :parameter json `data`: if success is True, it contains the created patient data in json format
 
+    .. http:method:: GET /demographics/patient/get/
 
-   .. http:method:: GET /demographics/patient/get/
+      Get the information of a patient querying an external PDQ supplier service using HL7 as protocol
 
-      Get the information of a patient
+      :parameter str query_string: the query string to search.
+
+      :responseheader Content-Type: application/json
+         :parameter boolean `success`: True if patients are successfully found. False otherwise
+         :parameter str `message`: a feedback string that would be displayed to the user
+         :parameter str `errors`: an error string that explains the raised problems
+         :parameter json `data`: if success is True, it contains the found patients data in json format
+
+   .. http:method:: GET /demographics/patient/filter/
+
+      Get the information of a patient from the local database
 
       :parameter str query_string: the query string to search.
 
@@ -169,6 +179,7 @@ Patient module
       Edit the information of a patient identified by `patient_id`
 
       :parameter json data: patient data:
+
          {
             'id': String,
             'account_number': String or None,

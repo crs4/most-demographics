@@ -27,3 +27,11 @@ your settings.py file.
     
     The sample blocks of code illustrate how to use them making use of the **[helper shown in this module](http://localhost:8888/notebooks/DemographicsHelper.ipynb)**
     )
+
+If you want to connect to an external PDQ supplier to get the patients data, specify in the settings.py file of your project the parameters of the MLLP server.
+For example:
+
+.. code:: python
+
+    MLLP_HOST = "localhost"
+    MLLP_PORT = 2575
