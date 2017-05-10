@@ -297,6 +297,7 @@ def deactivate(request, patient_id):
         result[SUCCESS_KEY] = False
     return HttpResponse(json.dumps(result), content_type='application/json; charset=utf8')
 
+
 @csrf_exempt
 @require_POST
 def set_birth_place(request, patient_id):

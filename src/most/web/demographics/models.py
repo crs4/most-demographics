@@ -7,11 +7,13 @@
 # Dual licensed under the MIT or GPL Version 2 licenses.
 # See license-GPLv2.txt or license-MIT.txt
 
+import string
+from datetime import date, datetime
+
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
-from datetime import date, datetime
+
 from utils import make_new_uid
-import string
 
 
 class Identifier(models.Model):
@@ -73,7 +75,8 @@ class City(models.Model):
     MANDATORY_FIELDS = ('name', 'state')
 
     name = models.CharField(_('Name'), max_length=255)
-    province = models.CharField(_('Province'), max_length=2, null=True, blank=True, help_text=_('Use 2 letters format')) # No control on existence of the province
+    province = models.CharField(_('Province'), max_length=2, null=True, blank=True,
+                                help_text=_('Use 2 letters format'))  # No control on existence of the province
     state = models.CharField(_('State'), max_length=50, help_text=_('Mandatory'))
     code = models.CharField(_('Code'), max_length=5, null=True, blank=True, help_text=_('e.g. C.A.P., ZIP, etc.'))
 
@@ -156,17 +159,20 @@ class Patient(models.Model):
     MANDATORY_FIELDS = ('first_name', 'last_name', 'gender', 'birth_date', 'birth_place')
 
     uid = models.CharField(max_length=40, unique=True, default=make_new_uid)
-    account_number = models.CharField(_('National Tax Code'), max_length=16, null=True, blank=True, help_text=_('e.g. SSN'))
+    account_number = models.CharField(_('National Tax Code'), max_length=16, null=True, blank=True,
+                                      help_text=_('e.g. SSN'))
     first_name = models.CharField(_('First name'), max_length=50)
     last_name = models.CharField(_('Last name'), max_length=50)
-    other_ids = models.ManyToManyField('Identifier', related_name='patient_related', null=True, blank=True, verbose_name=_('Other IDs'))
+    other_ids = models.ManyToManyField('Identifier', related_name='patient_related', null=True, blank=True,
+                                       verbose_name=_('Other IDs'))
     gender = models.CharField(_('Gender'), max_length=1, choices=GENDER_CHOICES)
     birth_date = models.DateField(_('Birth date'))
     birth_place = models.ForeignKey('City', related_name='born_patient_related', verbose_name=_('Birth place'))
     address = models.CharField(_('Address'), null=True, blank=True, max_length=255)
-    city = models.ForeignKey('City', related_name='addressed_patient_related', null=True, blank=True, verbose_name='City')
-    phone = models.CharField(_('Phone'), max_length=20, null=True, blank=True) # TODO: validation rules
-    mobile = models.CharField(_('Mobile phone'), max_length=20, null=True, blank=True) # TODO: validation rules
+    city = models.ForeignKey('City', related_name='addressed_patient_related', null=True, blank=True,
+                             verbose_name='City')
+    phone = models.CharField(_('Phone'), max_length=20, null=True, blank=True)  # TODO: validation rules
+    mobile = models.CharField(_('Mobile phone'), max_length=20, null=True, blank=True)  # TODO: validation rules
     email = models.EmailField(_('Email'), null=True, blank=True)
     certified_email = models.EmailField(_('Certified email'), null=True, blank=True)
     creation_timestamp = models.DateTimeField(auto_now_add=True)
@@ -216,13 +222,13 @@ class Patient(models.Model):
             compare_date = date.today()
         birthday = self.birth_date.replace(year=compare_date.year)
         if birthday > compare_date:
-            years = compare_date.year - self.birth_date.year -1
+            years = compare_date.year - self.birth_date.year - 1
             delta = compare_date - birthday
             weeks = int((365.25 + delta.days) / 7)
         else:
             years = compare_date.year - self.birth_date.year
             delta = compare_date - birthday
-            weeks = int(delta.days/7)
+            weeks = int(delta.days / 7)
         return years, weeks
 
     def to_dictionary(self):
@@ -246,9 +252,9 @@ class Patient(models.Model):
             'other_ids': [],
             'gender': u'%s' % self.gender,  # self.get_gender_display(),
             'birth_date': birth_date,
-            #'birth_date': u'%s' % self.birth_date if self.birth_date else None,
+            # 'birth_date': u'%s' % self.birth_date if self.birth_date else None,
             'birth_place': self.birth_place.to_dictionary() if self.birth_place else None,
-            #'birth_place': u'%s' % self.birth_place if self.birth_place else None,
+            # 'birth_place': u'%s' % self.birth_place if self.birth_place else None,
             'address': self.address if self.address else None,
             'city': self.city.to_dictionary() if self.city else None,
             'phone': u'%s' % self.phone if self.phone else None,
